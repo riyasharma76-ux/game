@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Math Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #question {
+            font-size: 24px;
+            margin: 20px;
+        }
+
+        input {
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 8px 15px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #score, #timer {
+            font-size: 18px;
+            margin: 10px;
+        }
+
+        #result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎯 Math Quiz Game</h1>
+
+    <div id="timer">Time: 30</div>
+    <div id="score">Score: 0</div>
+
+    <div id="question"></div>
+
+    <input type="number" id="answer" placeholder="Enter answer">
+    <br>
+    <button id="submitBtn">Submit</button>
+
+    <div id="result"></div>
+
+<script>
+
+    const questionEl = document.getElementById("question");
+    const answerEl = document.getElementById("answer");
+    const submitBtn = document.getElementById("submitBtn");
+    const scoreEl = document.getElementById("score");
+    const timerEl = document.getElementById("timer");
+    const resultEl = document.getElementById("result");
+
+    let score = 0;
+    let timeLeft = 30;
+    let correctAnswer;
+
+    // Generate Random Question
+    function generateQuestion() {
+        const num1 = Math.floor(Math.random() * 10) + 1;
+        const num2 = Math.floor(Math.random() * 10) + 1;
+
+        const operators = ["+", "-", "*"];
+        const randomOperator = operators[Math.floor(Math.random() * operators.length)];
+
+        questionEl.textContent = `${num1} ${randomOperator} ${num2} = ?`;
+
+        if (randomOperator === "+") {
+            correctAnswer = num1 + num2;
+        } else if (randomOperator === "-") {
+            correctAnswer = num1 - num2;
+        } else {
+            correctAnswer = num1 * num2;
+        }
+    }
+
+    // Check Answer
+    submitBtn.addEventListener("click", function() {
+        const userAnswer = Number(answerEl.value);
+
+        if (userAnswer === correctAnswer) {
+            score++;
+            resultEl.textContent = "✅ Correct!";
+        } else {
+            resultEl.textContent = "❌ Wrong!";
+        }
+
+        scoreEl.textContent = "Score: " + score;
+        answerEl.value = "";
+        generateQuestion();
+    });
+
+    // Timer Countdown
+    const timer = setInterval(function() {
+        timeLeft--;
+        timerEl.textContent = "Time: " + timeLeft;
+
+        if (timeLeft === 0) {
+            clearInterval(timer);
+            submitBtn.disabled = true;
+            answerEl.disabled = true;
+            resultEl.textContent = "⏰ Game Over!";
+        }
+    }, 1000);
+
+    // Start first question
+    generateQuestion();
+
+</script>
+
+</body>
+</html>
